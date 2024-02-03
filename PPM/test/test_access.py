@@ -4,8 +4,7 @@ from django.test import TestCase
 from django.utils import timezone
 from django.utils.crypto import get_random_string
 
-from PPM.access_manager.access_manager import  check_access
-from PPM.classes.access_request import AccessRequest
+# from PPM.access_manager.access_manager import  check_access
 from PPM.models import AccessTokens, Projects, Packages, PackageVersions, UserAccess, Teams, AccessUsersLogs, \
     AccessTeamsLogs
 from django.test import TestCase
@@ -14,8 +13,8 @@ from django.test import TestCase
 from django.utils import timezone
 from django.utils.crypto import get_random_string
 
-from PPM.access_manager.access_manager import check_access
-from PPM.classes.access_request import AccessRequest
+# from PPM.access_manager.access_manager import
+# from PPM.classes.access_request import AccessManager
 from PPM.models import AccessTokens, Projects, Packages, PackageVersions, UserAccess, Teams, AccessUsersLogs, \
     AccessTeamsLogs
 

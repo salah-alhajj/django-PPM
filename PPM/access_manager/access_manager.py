@@ -7,11 +7,14 @@ from PPM.models import *
 
 user_model = get_user_model()
 
-class AccessRequest:
+class AccessManager:
+
     def __init__(self, request: HttpRequest):
         package_name = request.path.split('/packages/')[1]
-
-        self.package = Packages.objects.get(name=package_name)
+        try:
+            self.package = Packages.objects.get(name=package_name)
+        except Packages.DoesNotExist:
+            self.package = None
         if request.user.is_authenticated:
             self.user = request.user
         else:
@@ -25,7 +28,7 @@ class AccessRequest:
 
         try:
             self.token = AccessTokens.objects.get(token_pass=token_pass, token_user=token_user,
-                                                  access_tokens__in=self.token)
+                                                  package=self.package)
         except AccessTokens.DoesNotExist:
             self.token = None
         try:
@@ -38,8 +41,8 @@ class AccessRequest:
             self.team = None
 
         self.ip_address = request.META.get('REMOTE_ADDR')
-        self.action = request.META.get('HTTP_USER_AGENT') + " " + request.META.get(
-            'HTTP_REFERER') + " " + request.META.get('HTTP_ACCEPT_LANGUAGE')
+        self.action = request.META.get('HTTP_USER_AGENT','') + " " + request.META.get(
+            'HTTP_REFERER','') + " " + request.META.get('HTTP_ACCEPT_LANGUAGE','')
 
         # self.token_user = token_user
 

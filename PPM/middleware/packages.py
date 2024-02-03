@@ -1,5 +1,7 @@
 from django.conf import settings
 from django.http import FileResponse, HttpResponse
+
+from PPM.access_manager.access_manager import AccessManager
 from PPM.middleware.md_file_handler import markdown_file_handler
 from PPM.middleware.pip_handler import pip_handler
 
@@ -13,6 +15,9 @@ class PackagesManagerDownloaderMiddleware(object):
     def __call__(self, request):
         if not request.path.startswith(f"{settings.PPM_CONFIG['PACKAGES_URL']}"):
             return self.get_response(request)
+        checker = AccessManager(request)
+        # if not AccessManager.check_access():
+        #     return HttpResponse("Access Denied", status=403)
 
         if request.method == 'POST':
 
