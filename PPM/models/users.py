@@ -12,21 +12,9 @@ class UserAccessTokenManager(models.Manager):
         qs = super().get_queryset().filter(is_active=True)
         return qs.filter(Q(Q(access_tokens__isnull=False) | Q(access_tokens__isnull=False)))
 
-    def filter(self, *args, **kwargs):
-        # we will passing the request object to the filter method
-        if 'request' in kwargs:
-            request = kwargs.pop('request')
-            qs = super().get_queryset().filter(*args, **kwargs)
-            qs.filter(is_active=True)
-            if request.user.is_anonymous:
-                return qs.filter(allow4all=True)
-            else:
-                return qs.filter(user=request.user)
-
-        return self.none()
 
 
-class UserAccessToken(models.Model):
+class UserAccess(models.Model):
     # UserAccessToken, uid, access_tokens, description, user, created_at, updated_at
     uid=models.CharField(max_length=64, editable=True, unique=True, )
     access_tokens = models.ManyToManyField('PPM.AccessTokens', related_name='user_access_token',

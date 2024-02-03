@@ -9,7 +9,8 @@ def packages_finder(package_name=None):
     packages = []
     BASE_DIR = settings.BASE_DIR
     # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    list_of_packages = os.listdir(os.path.join(BASE_DIR, 'packages'))
+    list_of_packages = os.listdir(os.path.join(BASE_DIR, f'packages/{package_name}'))
+
     for package in list_of_packages:
         temp_package = package.split('.')[0]
         temp_package = temp_package.split('-')[:-1]
@@ -18,6 +19,8 @@ def packages_finder(package_name=None):
             packages.append(VersionFile(name=package_name, link=package))
 
     return packages
+
+
 def list_packages():
     packages = []
     BASE_DIR = settings.BASE_DIR
@@ -32,8 +35,3 @@ def list_packages():
     # remove duplicates
     packages = list(dict.fromkeys(packages))
     return packages
-
-
-
-
-

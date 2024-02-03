@@ -62,12 +62,15 @@ class PackagesManager(models.Manager):
             if request.user.is_anonymous:
                 qs.filter(allow4all=True)
                 return qs
+            # elif request.is_authenticated:
+
         return self.none()
 
 
 class Packages(models.Model):
     # Packages name, description, versions, created_at, updated_at, is_active, allow4all, allow_md4all, allow_md4
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=64, unique=True, verbose_name=_("Package Name"),
+                            help_text=_("Enter the name of the package"), )
     description = models.TextField(blank=True, null=True, help_text=_("Enter a brief description of the package", ),
                                    verbose_name=_("Description"))
     versions = models.ManyToManyField(PackageVersions, related_name='package_version',

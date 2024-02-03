@@ -1,6 +1,9 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+
+user_class = get_user_model()
 
 
 class AccessTokensManager(models.Manager):
@@ -25,14 +28,31 @@ class AccessTokensManager(models.Manager):
             qs = qs.filter(saturday=True)
         elif time_now.weekday() == 6:
             qs = qs.filter(sunday=True)
+
         return qs
-    def count(self):
-        return super().count()
-    def get(self, *args, **kwargs):
-        return super().get(*args, **kwargs)
+
+
+
+    def get(self,token_user: str, token_pass: str, package, projects=None, ):
+        if token_user is None or token_pass is None or package is None:
+            return None
+        if projects is None:
+            return super(AccessTokensManager, self).get(token_user=token_user, token_pass=token_pass, package=package, )
+
+        return super(AccessTokensManager, self).get(token_user=token_user, token_pass=token_pass, package=package, project=projects, )
+
+    def filter(self,token_user, token_pass, package, project=None, ):
+            if token_user is None or token_pass is None or package is None:
+                return None  # Corrected this line
+
+            if project is None:
+                return super(AccessTokensManager, self).filter(token_user=token_user, token_pass=token_pass, package=package,)
+
+            return super(AccessTokensManager, self).filter(token_user=token_user, token_pass=token_pass, package=package, project=project,)
 
 
 class AccessTokens(models.Model):
+    # uid, token_user, token_pass, project, package
     uid = models.AutoField(verbose_name=_("UID"), primary_key=True, editable=False, unique=True, )
 
     description = models.TextField(
@@ -47,12 +67,12 @@ class AccessTokens(models.Model):
     token_pass = models.CharField(max_length=64, null=False, verbose_name=_("Token Pass"),
                                   help_text=_("Pass of this token"), unique=True)
     ############################################################################################
-    projects = models.ForeignKey('PPM.Projects', on_delete=models.CASCADE, related_name='team_project',
-                                 verbose_name=_("Team Project"),
-                                 help_text=_("Select the project for this team"))
-    packages = models.ForeignKey('PPM.Packages', on_delete=models.CASCADE, related_name='team_package',
-                                 verbose_name=_("Team Package"),
-                                 help_text=_("Select the package for this team"))
+    project = models.ForeignKey('PPM.Projects', on_delete=models.CASCADE, related_name='team_project',
+                                verbose_name=_("Team Project"),
+                                help_text=_("Select the project for this team"))
+    package = models.ForeignKey('PPM.Packages', on_delete=models.CASCADE, related_name='team_package',
+                                verbose_name=_("Team Package"),
+                                help_text=_("Select the package for this team"))
     ###########################################  Limiting Access  #################################################
 
     start_date = models.DateTimeField(verbose_name=_("Start Date"),

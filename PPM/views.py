@@ -4,8 +4,9 @@ from PPM.finder import packages_finder, list_packages
 
 
 def packages_details(request, package_name=None):
+    print(package_name)
     packages_list = packages_finder(package_name)
-    if request.method == "POST":
+    if request.method == "GET":
         return render(request, 'list_version.html', context={"packages_list": packages_list})
 
 

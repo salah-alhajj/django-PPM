@@ -26,7 +26,8 @@ class ProjectsManager(models.Manager):
 
 class Projects(models.Model):
     # Projects name, description, manager, packages, created_at, updated_at, is_active
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=64, unique=True, verbose_name=_("Project Name"),
+                            help_text=_("Enter the name of the project"), )
     description = models.TextField(
         blank=True,
         null=True,
