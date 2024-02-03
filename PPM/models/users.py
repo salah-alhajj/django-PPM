@@ -42,7 +42,7 @@ class UserAccess(models.Model):
     objects = UserAccessTokenManager()
 
     def __str__(self):
-        return self.user.full_name
+        return self.user.first_name + " " + self.user.last_name
 
     class Meta:
         verbose_name = 'Team'

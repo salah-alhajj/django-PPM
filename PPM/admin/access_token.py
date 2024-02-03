@@ -2,6 +2,8 @@ from django.contrib import admin
 
 from PPM.models import AccessTokens
 
+from PPM.models import AccessTokens, Projects, Packages, PackageVersions, UserAccess, Teams, AccessUsersLogs, \
+    AccessTeamsLogs
 
 class AccessTokensAdmin(admin.ModelAdmin):
     # token_user, token_pass, project, package
@@ -16,3 +18,11 @@ class AccessTokensAdmin(admin.ModelAdmin):
             return qs
         return qs.none()
 admin.site.register(AccessTokens, AccessTokensAdmin)
+admin.site.register(Projects)
+admin.site.register(Packages)
+admin.site.register(PackageVersions)
+admin.site.register(UserAccess)
+admin.site.register(Teams)
+admin.site.register(AccessUsersLogs)
+admin.site.register(AccessTeamsLogs)
+# Register your models here.

@@ -53,8 +53,15 @@ class AccessManager:
             return False
 
         user = UserAccess.objects.filter(user=self.user, access_tokens__in=self.token)
+        AccessUsersLogs.objects.create(user=self.user, access_token=self.token,
+                                       accessed_from=self.ip_address,
+                                       access_details=self.action,
+                                       project_accessed=self.token.project,
+                                       packages_accessed=self.package,
+                                       package_version_accessed=self.package_version)
 
         if user:
+
             project = self.token.project
             if project:
                 AccessUsersLogs.objects.create(user=self.user, access_token=self.token,

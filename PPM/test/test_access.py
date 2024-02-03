@@ -1,23 +1,13 @@
-from django.test import TestCase
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.utils import timezone
 from django.utils.crypto import get_random_string
 
-# from PPM.access_manager.access_manager import  check_access
+
 from PPM.models import AccessTokens, Projects, Packages, PackageVersions, UserAccess, Teams, AccessUsersLogs, \
     AccessTeamsLogs
-from django.test import TestCase
-from django.contrib.auth import get_user_model
-from django.test import TestCase
-from django.utils import timezone
-from django.utils.crypto import get_random_string
-
-# from PPM.access_manager.access_manager import
-# from PPM.classes.access_request import AccessManager
-from PPM.models import AccessTokens, Projects, Packages, PackageVersions, UserAccess, Teams, AccessUsersLogs, \
-    AccessTeamsLogs
-
+from PPM.access_manager.access_manager import AccessManager
 User = get_user_model()
 
 
@@ -34,13 +24,7 @@ class TestAccess(TestCase):
 
         user_access = UserAccess.objects.get(user=user, access_tokens=token )
         # package, package_version, user, token_pass, token_user, action
-        access_request = AccessRequest(
-            token_user=token.token_user,
-            token_pass=token.token_pass,
-            package=token.package,
-            user=user,
-            ip_address="10.0.0.2",
-            action="Test Action")
+        access_manager = AccessManager(request=None)
 
 
         self.assertEqual(check_access(request=access_request), True)
